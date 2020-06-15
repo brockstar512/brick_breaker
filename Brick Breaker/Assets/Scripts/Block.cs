@@ -9,22 +9,26 @@ public class Block : MonoBehaviour
     //cashed reference
     //type
     Level level;
+   
     
 
     private void Start() {
         //at the start we find a class called Level. so now level = the script called Level
         level = FindObjectOfType<Level>();
         level.CountBreakableBlocks();
+        
     }
 
     //when something collides to whatever holds this script...
     //were passing in a variable type of collison
     //there is trigger and collision
    private void OnCollisionEnter2D(Collision2D collision) {
+
+       FindObjectOfType<GameStatus>().AddToScore();
+
        //this way we are not grabbing the component sound. we are creating a audio source and we want it on the camera so it wont play far away
                         //sound were playing   //camera.whichever camera it is.trasform.position
        AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
-       
        //the game object that holds this script... i could create a 1 second delay by typing Destroy(gameObject, 1f) 
        //the collision variable just holds information about what it collides with and info about the collision... I think
        //if we destroy the brick on impact it will destory the sound effect attached to the file before it has a chance to play
@@ -32,6 +36,8 @@ public class Block : MonoBehaviour
        Destroy(gameObject);
 
        level.BlockDestroyed();
+
+       
 
 
    }
