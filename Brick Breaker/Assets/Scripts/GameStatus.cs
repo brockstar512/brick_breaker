@@ -60,6 +60,11 @@ public class GameStatus : MonoBehaviour
         scoreText.text = currentScore.ToString();
 
     }
+    public void ResetGame(){
+        //destroy this game status script when reset game is called. then a new one will be created
+        Destroy(gameObject);
+
+    }
 
 }
 
