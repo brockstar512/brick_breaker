@@ -6,10 +6,10 @@ public class Block : MonoBehaviour
 {
     [SerializeField] AudioClip breakSound;
     [SerializeField] GameObject blockSparklesVFX;
-    [SerializeField] int maxHits;
+    //instantiating block images
+    [SerializeField] Sprite[] hitSprites;
 
     //cashed reference
-    //type
     Level level;
 
     //state var
@@ -37,12 +37,31 @@ public class Block : MonoBehaviour
        //so we are going to play the sound effect even when its destroyed
        if(tag == "Breakable"){
             timesHit++;
+            int maxHits = hitSprites.Length + 1;
             if(timesHit>=maxHits){
             FindObjectOfType<GameStatus>().AddToScore();
             Destroy(gameObject);
             level.BlockDestroyed();
             TriggerSparklesVFX();
             }
+            else{
+                ShowNextHitSprite();
+            }
+       }
+   }
+   public void ShowNextHitSprite(){
+       int spriteIndex = timesHit - 1;
+       if(hitSprites[spriteIndex] != null)
+       //grabs compontn and the sprite renderer and makes it equal the times the block was hit - 1
+       {
+           GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+        }
+       //**this is saying when this is hit render this picture
+       //when its hit 1 it needs to go to the picture at index 0 
+       //thats why its times hit - 1
+       else
+       {
+           Debug.LogError("Block sprite missing from array" + gameObject.name);
        }
    }
    private void TriggerSparklesVFX(){
@@ -63,5 +82,9 @@ public class Block : MonoBehaviour
 //collider is how the item reacts when it collides to other objects it also gives it a physicall body
 //you can attach material to the collider
 //scripts attached give the items their state
+
+
+//it seems like get components allows us to grab attributes specific to that object. rather than things like 
+//tranform we can grab directly because every object has it.
 
 

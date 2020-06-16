@@ -14,6 +14,7 @@ public class GameStatus : MonoBehaviour
     //text on screen. grab this type of variable on the ui
     //however we have to drag the score text child into the game status ersialized field
     [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] bool isAutoPlayEnabled;
     
 
     //state
@@ -64,6 +65,9 @@ public class GameStatus : MonoBehaviour
         //destroy this game status script when reset game is called. then a new one will be created
         Destroy(gameObject);
 
+    }
+        public bool IsAutoPlayEnabled(){
+        return isAutoPlayEnabled;
     }
 
 }

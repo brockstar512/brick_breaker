@@ -11,6 +11,7 @@ public class Ballstick : MonoBehaviour
     [SerializeField] float yPush = 15f;
     // we are creating an array of the sounds for us to put into the UI
     [SerializeField] AudioClip[] ballSounds;
+    [SerializeField] float randomFactor = 0.2f;
 
 
     //state
@@ -20,6 +21,10 @@ public class Ballstick : MonoBehaviour
     //cached components references
     // we are creating a audio source datatype that is being declared as a my AudioSource
     AudioSource myAudioSource;
+    Rigidbody2D ballPhysics;
+    //best to grab a component at the start an cache it rather than constantly grabbing it 
+    //each time it is called. if you are going to call it multiple times
+
 
 
     // Start is called before the first frame update
@@ -33,6 +38,8 @@ public class Ballstick : MonoBehaviour
         //rather than having the computer grab the component every time the ball hits 
         //we are creating a variable that gets the component at the start of the game
         //then from there we are 
+
+        ballPhysics = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -65,7 +72,7 @@ public class Ballstick : MonoBehaviour
             //in order to launch ball we need access to its rigid body component
             //rigid body is what has the ball respond to gravity and physics 
             //this kind of component is a little more tricky to get ahold of.
-            GetComponent<Rigidbody2D>().velocity = new Vector2 (xPush, yPush);
+            ballPhysics.velocity = new Vector2 (xPush, yPush);
                                 //this is giving the ball a velocity in the x and y
 
             
@@ -77,6 +84,10 @@ public class Ballstick : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
     //grab the component - which component - what do you want to do with that component/what attribute
+    Vector2 velocityTweak = new Vector2
+        (UnityEngine.Random.Range(0f, randomFactor), 
+        UnityEngine.Random.Range(0f, randomFactor));
+
     // if anything is within the audio circle of the component the sound will go off
     //so we need an if statement to make sure the sound doesnt go off in the beginning 
     //when the ball if on top of the paddle
@@ -87,6 +98,7 @@ public class Ballstick : MonoBehaviour
             // we are using one Shot instead of just play so the sounds don't overlap on eachother
             myAudioSource.PlayOneShot(clip);
         // imight need to uncheck the default box play on wake. that plays the sound anything the game plays on start
+            ballPhysics.velocity += velocityTweak;
         }
     }
 }
